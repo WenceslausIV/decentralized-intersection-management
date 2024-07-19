@@ -38,24 +38,24 @@ class PIDController:
 
 human_controller = False
 
-dt = 0.05 # time steps in terms of seconds. In other words, 1/dt is the FPS.
+dt = 0.15 # time steps in terms of seconds. In other words, 1/dt is the FPS.
 w = World(dt, width = 120, height = 120, ppm = 6) # The world is 120 meters by 120 meters. ppm is the pixels per meter.
 
 w.add(Painting(Point(125.5, 116.5), Point(113, 75), 'gray80')) 
 w.add(Painting(Point(125.5, 116.5), Point(97, 89), 'gray80')) 
-w.add(RectangleBuilding(Point(126.5, 117.5), Point(105, 83))) 
+w.add(RectangleBuilding(Point(126, 117.5), Point(99, 76))) 
 # Let's repeat this for 4 different RectangleBuildings.
 w.add(Painting(Point(-5.5, 116.5), Point(97, 89), 'gray80'))
 w.add(Painting(Point(-5.5, 116.5), Point(113, 75), 'gray80'))
-w.add(RectangleBuilding(Point(-6.5, 117.5), Point(105, 83)))
+w.add(RectangleBuilding(Point(-6.5, 117.5), Point(99, 76)))
 
 w.add(Painting(Point(-5.5, 10), Point(97, 88), 'gray80'))
 w.add(Painting(Point(-5.5, 10), Point(113, 75), 'gray80'))
-w.add(RectangleBuilding(Point(-6.5, 9), Point(95, 73)))
+w.add(RectangleBuilding(Point(-6.5, 9), Point(99, 76)))
 
 w.add(Painting(Point(125.5, 10.5), Point(97, 87), 'gray80'))
 w.add(Painting(Point(125.5, 10.5), Point(113, 75), 'gray80'))
-w.add(RectangleBuilding(Point(126, 9), Point(95, 73)))
+w.add(RectangleBuilding(Point(126, 9), Point(99, 76)))
 
 #bottom middle lines
 w.add(Painting(Point(60, 45), Point(2, 8), 'gray80'))
@@ -74,208 +74,77 @@ w.add(Painting(Point(38, 63), Point(8, 2), 'gray80'))
 w.add(Painting(Point(18, 63), Point(8, 2), 'gray80'))
 w.add(Painting(Point(-2, 63), Point(8, 2), 'gray80'))
 #cb = CircleBuilding(Point(world_width/2, world_height/2), inner_building_radius, 'gray80')
+
 w.add(CircleBuilding(Point(77, 80), 8, 'gray80')) # top right circle
 w.add(CircleBuilding(Point(77, 46), 8, 'gray80')) # bottom right circle
 w.add(CircleBuilding(Point(43, 80), 8, 'gray80')) # top left circle
 w.add(CircleBuilding(Point(43, 46), 8, 'gray80')) # bottom left circle
-w.add(Painting(Point(71, 74), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(70, 73), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(69, 72), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(68, 71), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(67, 70), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(66, 69), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(65, 68), Point(0.5, 0.5), 'red')) # top right conflict zone
-w.add(Painting(Point(64, 67), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(63, 66), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(62, 65), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(61, 64), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(59, 62), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(58, 61), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(57, 60), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(56, 59), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(55, 58), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(54, 57), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(53, 56), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(52, 55), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(51, 54), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(50, 53), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(49, 52), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(55, 58), Point(0.5, 0.5), 'red')) # bottom left conflict zone
-w.add(Painting(Point(49, 74), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(50, 73), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(51, 72), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(52, 71), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(53, 70), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(54, 69), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(55, 68), Point(0.5, 0.5), 'red')) # top left conflict zone
-w.add(Painting(Point(56, 67), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(57, 66), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(58, 65), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(59, 64), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(61, 62), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(62, 61), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(63, 60), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(64, 59), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(65, 58), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(66, 57), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(67, 56), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(68, 55), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(69, 54), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(70, 53), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(71, 52), Point(0.5, 0.5), 'blue'))
+w.add(RectangleBuilding(Point(126, 117.5), Point(99, 76))) 
+w.add(RectangleBuilding(Point(-6.5, 117.5), Point(99, 76)))
+w.add(RectangleBuilding(Point(-6.5, 9), Point(99, 76)))
+w.add(RectangleBuilding(Point(126, 9), Point(99, 76)))
+#hi
+
+
+def paint_x_mark(center_x, center_y, size, color, world, point_spacing=0.5):
+    half_size = size / 2
+    num_points = int(size / point_spacing) + 1
+    for i in range(num_points):
+        x_offset = i * point_spacing
+        world.add(Painting(Point(center_x - half_size + x_offset, center_y - half_size + x_offset), Point(0.4, 0.4), color))
+        world.add(Painting(Point(center_x - half_size + x_offset, center_y + half_size - x_offset), Point(0.4, 0.4), color))
+
+# Example usage:
+paint_x_mark(60, 63, 22, 'blue', w, point_spacing=0.3)
+
+
+
 # now vertical blue lines
-#w.add(Painting(Point(60, 47), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 48), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 49), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 50), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 51), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 52), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 53), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 54), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 55), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 56), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 57), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 58), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 59), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 60), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 61), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 62), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 64), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 65), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 66), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 67), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 68), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 69), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 70), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 71), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 72), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 73), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 74), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 75), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 76), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 77), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 78), Point(0.5, 0.5), 'blue'))
+
+w.add(Painting(Point(60, 55), Point(0.3, 18), 'blue'))
+w.add(Painting(Point(60, 70), Point(0.3, 20), 'blue'))
+
 # now horizontal blue lines
-w.add(Painting(Point(45, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(46, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(47, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(48, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(49, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(50, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(51, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(52, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(53, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(54, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(55, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(56, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(57, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(58, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(59, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(61, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(62, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(63, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(64, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(65, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(66, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(67, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(68, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(69, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(70, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(71, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(72, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(73, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(74, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(75, 63), Point(0.5, 0.5), 'blue'))
+
+w.add(Painting(Point(57, 63), Point(28, 0.3), 'blue'))
+
+w.add(Painting(Point(63, 63), Point(28, 0.3), 'blue'))
+
 
 #rightest side vertical blue line
-w.add(Painting(Point(77, 55), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 56), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 57), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 58), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 59), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 60), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 61), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 62), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 63), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 64), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 65), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 66), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 67), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 68), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 69), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 70), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(77, 71), Point(0.5, 0.5), 'blue'))
+
+w.add(Painting(Point(77, 63), Point(0.3, 18), 'blue'))
+
 #leftest side vertical blue line
-w.add(Painting(Point(43, 55), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 56), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 57), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 58), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 59), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 60), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 61), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 62), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 63), Point(0.5, 0.5), 'blue')) #middle
-w.add(Painting(Point(43, 64), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 65), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 66), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 67), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 68), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 69), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 70), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(43, 71), Point(0.5, 0.5), 'blue'))
+
+w.add(Painting(Point(43, 63), Point(0.3, 18), 'blue')) #middle
+
 
 #very top horizontal
-w.add(Painting(Point(52, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(53, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(54, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(55, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(56, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(57, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(58, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(59, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 80), Point(0.5, 0.5), 'blue')) # middle
-w.add(Painting(Point(61, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(62, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(63, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(64, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(65, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(66, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(67, 80), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(68, 80), Point(0.5, 0.5), 'blue'))
+
+w.add(Painting(Point(60, 80), Point(18, 0.3), 'blue')) # middle
+
 # very bottom horizontal
-w.add(Painting(Point(52, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(53, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(54, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(55, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(56, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(57, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(58, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(59, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 46), Point(0.5, 0.5), 'blue')) # middle
-w.add(Painting(Point(61, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(62, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(63, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(64, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(65, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(66, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(67, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(68, 46), Point(0.5, 0.5), 'blue'))
-w.add(Painting(Point(60, 68), Point(0.5, 0.5), 'red')) # top middle conflict zone
-w.add(Painting(Point(55, 63), Point(0.5, 0.5), 'red')) # middle left conflict zone
-w.add(Painting(Point(60, 58), Point(0.5, 0.5), 'red')) # bottom middle conflict zone
-w.add(Painting(Point(65, 58), Point(0.5, 0.5), 'red')) # bottom right conflict zone
-w.add(Painting(Point(65, 63), Point(0.5, 0.5), 'pink')) #middle right lane conflict point
+
+w.add(Painting(Point(60, 46), Point(18, 0.3), 'blue')) # middle
+
+w.add(Painting(Point(65, 68), Point(1, 1), 'red')) # top right conflict zone
+
+w.add(Painting(Point(55, 58), Point(1, 1), 'red')) # bottom left conflict zone
+
+w.add(Painting(Point(55, 68), Point(1, 1), 'red')) # top left conflict zone
+w.add(Painting(Point(60, 68), Point(1, 1), 'red')) # top middle conflict zone
+w.add(Painting(Point(55, 63), Point(1, 1), 'red')) # middle left conflict zone
+w.add(Painting(Point(60, 58), Point(1, 1), 'red')) # bottom middle conflict zone
+w.add(Painting(Point(65, 58), Point(1, 1), 'red')) # bottom right conflict zone
+w.add(Painting(Point(65, 63), Point(1, 1), 'red')) #middle right lane conflict point
 
 def draw_curved_line(center, radius, start_angle, end_angle, num_points, color):
     angles = np.linspace(start_angle, end_angle, num_points)
     for angle in angles:
         x = center[0] + radius * np.cos(angle)
         y = center[1] + radius * np.sin(angle)
-        w.add(Painting(Point(x, y), Point(0.5, 0.5), color))
+        w.add(Painting(Point(x, y), Point(0.4, 0.4), color))
 
 def draw_curved_line_list(center, radius, start_angle, end_angle, num_points, color):
     angles = np.linspace(start_angle, end_angle, num_points)
@@ -288,20 +157,20 @@ def draw_curved_line_list(center, radius, start_angle, end_angle, num_points, co
         elif center == (77, 80):
             t_r_path.append((x,y))
 
-draw_curved_line(center=(77, 80), radius=16, start_angle=np.pi, end_angle=3*np.pi/2, num_points=20, color='blue')
-draw_curved_line(center=(43, 80), radius=16, start_angle=3*np.pi/2, end_angle=2*np.pi, num_points=20, color='blue')
-draw_curved_line(center=(77, 46), radius=16, start_angle=np.pi/2, end_angle=np.pi, num_points=20, color='blue')
-draw_curved_line(center=(43, 46), radius=16, start_angle=0, end_angle=np.pi/2, num_points=20, color='blue')
-draw_curved_line(center=(77, 80), radius=8, start_angle=np.pi, end_angle=3*np.pi/2, num_points=20, color='blue')
-draw_curved_line(center=(43, 80), radius=8, start_angle=3*np.pi/2, end_angle=2*np.pi, num_points=20, color='blue')
-draw_curved_line(center=(77, 46), radius=8, start_angle=np.pi/2, end_angle=np.pi, num_points=20, color='blue')
-draw_curved_line(center=(43, 46), radius=8, start_angle=0, end_angle=np.pi/2, num_points=20, color='blue')
+draw_curved_line(center=(77, 80), radius=16, start_angle=np.pi, end_angle=3*np.pi/2, num_points=70, color='blue')
+draw_curved_line(center=(43, 80), radius=16, start_angle=3*np.pi/2, end_angle=2*np.pi, num_points=70, color='blue')
+draw_curved_line(center=(77, 46), radius=16, start_angle=np.pi/2, end_angle=np.pi, num_points=70, color='blue')
+draw_curved_line(center=(43, 46), radius=16, start_angle=0, end_angle=np.pi/2, num_points=70, color='blue')
+draw_curved_line(center=(77, 80), radius=8, start_angle=np.pi, end_angle=3*np.pi/2, num_points=70, color='blue')
+draw_curved_line(center=(43, 80), radius=8, start_angle=3*np.pi/2, end_angle=2*np.pi, num_points=70, color='blue')
+draw_curved_line(center=(77, 46), radius=8, start_angle=np.pi/2, end_angle=np.pi, num_points=70, color='blue')
+draw_curved_line(center=(43, 46), radius=8, start_angle=0, end_angle=np.pi/2, num_points=70, color='blue')
 
-draw_curved_line_list(center=(77, 80), radius=21, start_angle=np.pi, end_angle=3*np.pi/2, num_points=20, color='white') # right and top curved path
-draw_curved_line_list(center=(43, 80), radius=21, start_angle=3*np.pi/2, end_angle=2*np.pi, num_points=20, color='white') # left and top curved path
-draw_curved_line_list(center=(77, 46), radius=21, start_angle=np.pi/2, end_angle=np.pi, num_points=20, color='green')# right and bottom curved path
+draw_curved_line_list(center=(77, 80), radius=21, start_angle=np.pi, end_angle=3*np.pi/2, num_points=10, color='white') # right and top curved path
+draw_curved_line_list(center=(43, 80), radius=21, start_angle=3*np.pi/2, end_angle=2*np.pi, num_points=10, color='white') # left and top curved path
+draw_curved_line_list(center=(77, 46), radius=21, start_angle=np.pi/2, end_angle=np.pi, num_points=10, color='white')# right and bottom curved path
 r_b_path.append((55,0))
-draw_curved_line_list(center=(43, 46), radius=21, start_angle=0, end_angle=np.pi/2, num_points=20, color='white')# left and bottom curved path
+draw_curved_line_list(center=(43, 46), radius=21, start_angle=0, end_angle=np.pi/2, num_points=10, color='white')# left and bottom curved path
 
 # A Car object is a dynamic object -- it can move. We construct it using its center location and heading angle.
 #c1 = Car(Point(70,20), np.pi/2)
