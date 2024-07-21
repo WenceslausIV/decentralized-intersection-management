@@ -338,38 +338,67 @@ def cbf(x, u_ref):
                         A[count, i] = 1.0
                         b[count] = constraint_value1
                         count += 1
+
+
+                #55, 58
+                elif lane_list[i] == 'rd' and lane_list[j] == 'u':
+                    if (x[1,i] < 58 or x[1,j] < 58) and (x[1,i] < x[1,j]):
+                        constraint_value1 = (1 / phi) * (lambda_3 * (np.linalg.norm(-x[:,i] + x[:,j]) - (gamma + phi * v_j)) + v_i - v_j) + F_rm_i
+                        A[count, j] = 1.0
+                        b[count] = constraint_value1
+                        count += 1
+
+                    elif (x[1,i] < 58 or x[1,j] < 58) and (x[1,i] >= x[1,j]):
+                        constraint_value1 = (1 / phi) * (lambda_3 * (np.linalg.norm(-x[:,i] + x[:,j]) - (gamma + phi * v_j)) + v_i - v_j) + F_rm_i
+                        A[count, i] = 1.0
+                        b[count] = constraint_value1
+                        count += 1
+
+                elif lane_list[j] == 'rd' and lane_list[i] == 'u':
+                    if (x[1,i] < 58 or x[1,j] < 58) and (x[1,i] < x[1,j]):
+                        constraint_value1 = (1 / phi) * (lambda_3 * (np.linalg.norm(-x[:,i] + x[:,j]) - (gamma + phi * v_j)) + v_i - v_j) + F_rm_i
+                        A[count, j] = 1.0
+                        b[count] = constraint_value1
+                        count += 1
+
+                    elif (x[1,i] < 58 or x[1,j] < 58) and (x[1,i] >= x[1,j]):
+                        constraint_value1 = (1 / phi) * (lambda_3 * (np.linalg.norm(-x[:,i] + x[:,j]) - (gamma + phi * v_j)) + v_i - v_j) + F_rm_i
+                        A[count, i] = 1.0
+                        b[count] = constraint_value1
+                        count += 1
+
                 elif lane_list[i] == 'r' and lane_list[j] == 'u':
                     
-                    delta_i = 20
+                    delta_i = 15
                     s_n_i =  np.linalg.norm(x[:,i] - np.array([55, 68]))
                     s_n_j = np.linalg.norm(x[:,j] - np.array([55, 68]))
                     if delta_i >= s_n_i  + s_n_j:
 
-                        if x[0,i] > 55 and x[1,j] > 68 and (s_n_i > s_n_j):
+                        if x[0,i] > 55 and x[1,j] > 66 and (s_n_i > s_n_j):
 
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
                             A[count, i] = 1.0
                             b[count] = constraint_value4
                             count += 1
-                        elif x[0,i] > 55 and x[1,j] > 68 and (s_n_i <= s_n_j):
+                        elif x[0,i] > 55 and x[1,j] > 66 and (s_n_i <= s_n_j):
 
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
                             A[count, j] = 1.0
                             b[count] = constraint_value4
                             count += 1
                 elif lane_list[j] == 'r' and lane_list[i] == 'u':
-                    delta_i = 20
+                    delta_i = 15
                     s_n_i =  np.linalg.norm(x[:,i] - np.array([55, 68]))
                     s_n_j = np.linalg.norm(x[:,j] - np.array([55, 68]))
                     if delta_i >= s_n_i  + s_n_j:
 
-                        if x[0,j] > 55 and x[1,i] > 68 and (s_n_i > s_n_j):
+                        if x[0,j] > 55 and x[1,i] > 66 and (s_n_i > s_n_j):
 
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
                             A[count, i] = 1.0
                             b[count] = constraint_value4
                             count += 1
-                        elif x[0,j] > 55 and x[1,i] > 68 and (s_n_i <= s_n_j):
+                        elif x[0,j] > 55 and x[1,i] > 66 and (s_n_i <= s_n_j):
 
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
                             A[count, j] = 1.0
@@ -499,7 +528,7 @@ def cbf(x, u_ref):
 
 
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'u') or (lane_list[j] == 'rd' and lane_list[i] == 'u'):
-                    delta = 30.0
+                    delta = 40.0
                     cp = np.array([56, 46])
                     di = distance_along_path(x[:,i], r_b_path, cp)
                     dj = distance_along_path(x[:,j], r_b_path, cp)
@@ -512,7 +541,7 @@ def cbf(x, u_ref):
                             s_n_j = np.linalg.norm(x[:,j] - np.array([56, 46]))
                             phi = 0.1
                             lambda_4 = 10.0
-                            delta_i = 30.0
+                            delta_i = 40.0
 
                             #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
@@ -528,7 +557,7 @@ def cbf(x, u_ref):
                             s_n_j = np.linalg.norm(x[:,j] - np.array([56, 46]))
                             phi = 0.1
                             lambda_4 = 10.0
-                            delta_i = 30.0
+                            delta_i = 40.0
 
                             #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
@@ -545,7 +574,7 @@ def cbf(x, u_ref):
                             s_n_j =  distance_along_path(x[:,j], r_b_path, cp)
                             phi = 0.1
                             lambda_4 = 10.0
-                            delta_i = 30.0
+                            delta_i = 40.0
 
                             #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
@@ -562,7 +591,7 @@ def cbf(x, u_ref):
                             s_n_j =  distance_along_path(x[:,j], r_b_path, cp)
                             phi = 0.1
                             lambda_4 = 10.0
-                            delta_i = 30.0
+                            delta_i = 40.0
 
                             #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
                             constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
