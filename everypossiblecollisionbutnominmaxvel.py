@@ -241,7 +241,7 @@ def cbf(x, u_ref):
 
     H = sparse(matrix(2*np.identity(N)))
     f = -2*np.reshape(u_ref, N, order='F')
-    num_constraints = 2 * int(comb(N, 2)) + 2 + 6 + 5
+    num_constraints = 2 * int(comb(N, 2)) + 2 + 6 + 5 + 10
     A = np.zeros((num_constraints, N))
     b = np.zeros(num_constraints)
     phi = 0.1
@@ -254,7 +254,7 @@ def cbf(x, u_ref):
     car_width_halved = 1.5
     count = 0
     F_rm_i = 0.001
-    for i in range(N):
+    for i in range(N-1):
         for j in range(i+1, N):
             v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
             v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
@@ -341,7 +341,7 @@ def cbf(x, u_ref):
 
 
                 #55, 58
-                elif lane_list[i] == 'rd' and lane_list[j] == 'u':
+                elif lane_list[i] == 'rd' and lane_list[j] == 'u' and (x[1,i] < 58 or x[1,j] < 58):
                     if (x[1,i] < 58 or x[1,j] < 58) and (x[1,i] < x[1,j]):
                         constraint_value1 = (1 / phi) * (lambda_3 * (np.linalg.norm(-x[:,i] + x[:,j]) - (gamma + phi * v_j)) + v_i - v_j) + F_rm_i
                         A[count, j] = 1.0
@@ -354,7 +354,7 @@ def cbf(x, u_ref):
                         b[count] = constraint_value1
                         count += 1
 
-                elif lane_list[j] == 'rd' and lane_list[i] == 'u':
+                elif lane_list[j] == 'rd' and lane_list[i] == 'u'and (x[1,i] < 58 or x[1,j] < 58):
                     if (x[1,i] < 58 or x[1,j] < 58) and (x[1,i] < x[1,j]):
                         constraint_value1 = (1 / phi) * (lambda_3 * (np.linalg.norm(-x[:,i] + x[:,j]) - (gamma + phi * v_j)) + v_i - v_j) + F_rm_i
                         A[count, j] = 1.0
@@ -530,79 +530,85 @@ def cbf(x, u_ref):
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'u') or (lane_list[j] == 'rd' and lane_list[i] == 'u'):
                     delta = 40.0
                     cp = np.array([56, 46])
-                    di = distance_along_path(x[:,i], r_b_path, cp)
-                    dj = distance_along_path(x[:,j], r_b_path, cp)
-                    if delta >= di + dj:
+                    print("rd and u exist")
+                    if (lane_list[i] == 'rd' and lane_list[j] == 'u'):
+                        di = distance_along_path(x[:,i], r_b_path, cp)
+                        dj = np.linalg.norm(x[:,j] - np.array([56, 46]))
+                        if delta >= di + dj:
+                            print("hallo1")
+                            if lane_list[i] == 'rd' and lane_list[j] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di <= dj):
 
-                        if lane_list[i] == 'rd' and lane_list[j] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di <= dj):
+                                s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
+                                
+                                s_n_j = np.linalg.norm(x[:,j] - np.array([56, 46]))
+                                phi = 0.1
+                                lambda_4 = 10.0
+                                delta_i = 40.0
 
-                            s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
+                                #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
+                                constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
 
-                            s_n_j = np.linalg.norm(x[:,j] - np.array([56, 46]))
-                            phi = 0.1
-                            lambda_4 = 10.0
-                            delta_i = 40.0
+                                A[count, j] = 1.0
+                                b[count] = constraint_value4
+                                count += 1
 
-                            #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
-                            constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
+                            elif lane_list[i] == 'rd' and lane_list[j] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di >= dj):   
 
-                            A[count, j] = 1.0
-                            b[count] = constraint_value4
-                            count += 1
+                                s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
 
-                        elif lane_list[i] == 'rd' and lane_list[j] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di >= dj):   
+                                s_n_j = np.linalg.norm(x[:,j] - np.array([56, 46]))
+                                phi = 0.1
+                                lambda_4 = 10.0
+                                delta_i = 40.0
 
-                            s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
+                                #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
+                                constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
 
-                            s_n_j = np.linalg.norm(x[:,j] - np.array([56, 46]))
-                            phi = 0.1
-                            lambda_4 = 10.0
-                            delta_i = 40.0
+                                A[count, i] = 1.0
+                                b[count] = constraint_value4
+                                count += 1
 
-                            #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
-                            constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
+                    elif (lane_list[j] == 'rd' and lane_list[i] == 'u'):
+                        di = np.linalg.norm(x[:,i] - np.array([56, 46]))
+                        dj = distance_along_path(x[:,j], r_b_path, cp)
+                        if delta >= di + dj:
+                            print("hallo2")
+                            if lane_list[j] == 'rd' and lane_list[i] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di <= dj):
 
-                            A[count, i] = 1.0
-                            b[count] = constraint_value4
-                            count += 1
-                        elif lane_list[j] == 'rd' and lane_list[i] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di <= dj):
-                            #Point(56, 46)
-                            #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
-                            cp = np.array([56, 46])
-                            s_n_i =  np.linalg.norm(x[:,i] - np.array([56, 46]))
+                                cp = np.array([56, 46])
+                                s_n_i =  np.linalg.norm(x[:,i] - np.array([56, 46]))
 
-                            s_n_j =  distance_along_path(x[:,j], r_b_path, cp)
-                            phi = 0.1
-                            lambda_4 = 10.0
-                            delta_i = 40.0
+                                s_n_j =  distance_along_path(x[:,j], r_b_path, cp)
+                                phi = 0.1
+                                lambda_4 = 10.0
+                                delta_i = 40.0
 
-                            #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
-                            constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
+                                #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
+                                constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
 
-                            A[count, j] = 1.0
-                            b[count] = constraint_value4
-                            count += 1   
-                        elif lane_list[j] == 'rd' and lane_list[i] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di >= dj):
-                            #Point(56, 46)
-                            #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
-                            cp = np.array([56, 46])
-                            s_n_i =  np.linalg.norm(x[:,i] - np.array([56, 46]))
+                                A[count, j] = 1.0
+                                b[count] = constraint_value4
+                                count += 1   
+                            elif lane_list[j] == 'rd' and lane_list[i] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di >= dj):
+                                print(s_n_i)
+                                cp = np.array([56, 46])
+                                s_n_i =  np.linalg.norm(x[:,i] - np.array([56, 46]))
 
-                            s_n_j =  distance_along_path(x[:,j], r_b_path, cp)
-                            phi = 0.1
-                            lambda_4 = 10.0
-                            delta_i = 40.0
+                                s_n_j =  distance_along_path(x[:,j], r_b_path, cp)
+                                phi = 0.1
+                                lambda_4 = 10.0
+                                delta_i = 40.0
 
-                            #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
-                            constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
+                                #constraint_value4 = (1 / phi) * (lambda_4 * ((46.0-x[1,i]) + ( -(56.0-x[0,j]) ) - (gamma2 + phi * v_i)) - (v_i + v_j) ) + F_rm_i
+                                constraint_value4= 1 / phi * (lambda_4 * (s_n_i + s_n_j - delta_i) - (v_i + v_j)) + F_rm_i
 
-                            A[count, i] = 1.0
-                            b[count] = constraint_value4
-                            count += 1   
+                                A[count, i] = 1.0
+                                b[count] = constraint_value4
+                                count += 1   
 
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'd') or (lane_list[j] == 'rd' and lane_list[i] == 'd'):
                     delta = 30.0
-
+                    #print("rd and d exist")
                     cp = np.array([65, 63])
                     di = distance_along_path(x[:,i], r_b_path, cp)
                     dj = distance_along_path(x[:,j], r_b_path, cp)
@@ -677,14 +683,14 @@ def cbf(x, u_ref):
                             count += 1
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'l') or (lane_list[j] == 'rd' and lane_list[i] == 'l'):
                     delta = 30.0
-                    #print("this is the problem0")
+                    #print("rd and l exist")
                     cp = np.array([60, 58])
                     di = distance_along_path(x[:,i], r_b_path, cp)
                     dj = distance_along_path(x[:,j], r_b_path, cp)
                     if delta >= di + dj:
-                        print("this is the problem0")
+
                         if lane_list[i] == 'rd' and lane_list[j] == 'l' and x[1,i] > 58 and x[0,j] < 60 and (di <= dj):
-                            print("this is the problem1")
+
                             s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
                             #print(s_n_i)
                             s_n_j = np.linalg.norm(x[:,j] - np.array([60, 58]))
@@ -700,7 +706,7 @@ def cbf(x, u_ref):
                             count += 1
 
                         elif lane_list[i] == 'rd' and lane_list[j] == 'l' and x[1,i] > 58 and x[0,j] < 60 and (di >= dj):   
-                            print("this is the problem2")
+
                             s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
 
                             s_n_j = np.linalg.norm(x[:,j] - np.array([60, 58]))
@@ -715,8 +721,7 @@ def cbf(x, u_ref):
                             b[count] = constraint_value4
                             count += 1
                         elif lane_list[j] == 'rd' and lane_list[i] == 'l' and x[0,i] < 60 and x[1,j] > 58 and (di <= dj):
-                            #Point(56, 46)
-                            print("this is the problem3")
+
                             #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
                             cp = np.array([60, 58])
                             s_n_i =  np.linalg.norm(x[:,i] - np.array([60, 58]))
@@ -733,8 +738,7 @@ def cbf(x, u_ref):
                             b[count] = constraint_value4
                             count += 1   
                         elif lane_list[j] == 'rd' and lane_list[i] == 'l' and x[0,i] < 60 and x[1,j] > 58 and (di >= dj):
-                            #Point(56, 46)
-                            print("this is the problem4")
+
                             #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
                             cp = np.array([60, 58])
                             s_n_i =  np.linalg.norm(x[:,i] - np.array([60, 58]))
