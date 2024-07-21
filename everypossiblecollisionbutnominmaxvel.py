@@ -530,12 +530,12 @@ def cbf(x, u_ref):
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'u') or (lane_list[j] == 'rd' and lane_list[i] == 'u'):
                     delta = 40.0
                     cp = np.array([56, 46])
-                    print("rd and u exist")
+
                     if (lane_list[i] == 'rd' and lane_list[j] == 'u'):
                         di = distance_along_path(x[:,i], r_b_path, cp)
                         dj = np.linalg.norm(x[:,j] - np.array([56, 46]))
                         if delta >= di + dj:
-                            print("hallo1")
+
                             if lane_list[i] == 'rd' and lane_list[j] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di <= dj):
 
                                 s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
@@ -572,7 +572,7 @@ def cbf(x, u_ref):
                         di = np.linalg.norm(x[:,i] - np.array([56, 46]))
                         dj = distance_along_path(x[:,j], r_b_path, cp)
                         if delta >= di + dj:
-                            print("hallo2")
+
                             if lane_list[j] == 'rd' and lane_list[i] == 'u' and x[1,j] > 46 and x[1,i] > 46 and (di <= dj):
 
                                 cp = np.array([56, 46])
@@ -608,13 +608,13 @@ def cbf(x, u_ref):
 
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'd') or (lane_list[j] == 'rd' and lane_list[i] == 'd'):
                     delta = 30.0
-                    #print("rd and d exist")
+
                     cp = np.array([65, 63])
                     di = distance_along_path(x[:,i], r_b_path, cp)
                     dj = distance_along_path(x[:,j], r_b_path, cp)
                     if delta >= di + dj:
 
-                        if lane_list[i] == 'rd' and lane_list[j] == 'd' and x[1,j] < 63 and x[0,i] > 65 and (di <= dj):
+                        if lane_list[i] == 'rd' and lane_list[j] == 'd' and x[1,j] < 67 and x[0,i] > 61 and (di <= dj):
 
                             s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
                             #print(s_n_i)
@@ -630,7 +630,7 @@ def cbf(x, u_ref):
                             b[count] = constraint_value4
                             count += 1
 
-                        elif lane_list[i] == 'rd' and lane_list[j] == 'd' and x[1,j] < 63 and x[0,i] > 65 and (di >= dj):   
+                        elif lane_list[i] == 'rd' and lane_list[j] == 'd' and x[1,j] < 67 and x[0,i] > 61 and (di >= dj):   
 
                             s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
 
@@ -645,7 +645,7 @@ def cbf(x, u_ref):
                             A[count, i] = 1.0
                             b[count] = constraint_value4
                             count += 1
-                        elif lane_list[j] == 'rd' and lane_list[i] == 'd' and x[1,i] < 63 and x[0,j] > 65 and (di <= dj):
+                        elif lane_list[j] == 'rd' and lane_list[i] == 'd' and x[1,i] < 67 and x[0,j] > 61 and (di <= dj):
                             #Point(56, 46)
 
                             #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
@@ -663,7 +663,7 @@ def cbf(x, u_ref):
                             A[count, j] = 1.0
                             b[count] = constraint_value4
                             count += 1   
-                        elif lane_list[j] == 'rd' and lane_list[i] == 'd' and x[1,i] < 63 and x[0,j] > 65 and (di >= dj):
+                        elif lane_list[j] == 'rd' and lane_list[i] == 'd' and x[1,i] < 67 and x[0,j] > 61 and (di >= dj):
                             #Point(56, 46)
 
                             #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
@@ -683,16 +683,16 @@ def cbf(x, u_ref):
                             count += 1
                 elif (lane_list[i] == 'rd' and lane_list[j] == 'l') or (lane_list[j] == 'rd' and lane_list[i] == 'l'):
                     delta = 30.0
-                    #print("rd and l exist")
+
                     cp = np.array([60, 58])
                     di = distance_along_path(x[:,i], r_b_path, cp)
                     dj = distance_along_path(x[:,j], r_b_path, cp)
                     if delta >= di + dj:
 
-                        if lane_list[i] == 'rd' and lane_list[j] == 'l' and x[1,i] > 58 and x[0,j] < 60 and (di <= dj):
-
+                        if lane_list[i] == 'rd' and lane_list[j] == 'l' and x[1,i] > 54 and x[0,j] < 64 and (di < dj):
+                            #print("rd and l exist1")
                             s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
-                            #print(s_n_i)
+                            print(s_n_i)
                             s_n_j = np.linalg.norm(x[:,j] - np.array([60, 58]))
                             phi = 0.1
                             lambda_4 = 10.0
@@ -705,8 +705,8 @@ def cbf(x, u_ref):
                             b[count] = constraint_value4
                             count += 1
 
-                        elif lane_list[i] == 'rd' and lane_list[j] == 'l' and x[1,i] > 58 and x[0,j] < 60 and (di >= dj):   
-
+                        elif lane_list[i] == 'rd' and lane_list[j] == 'l' and x[1,i] > 54 and x[0,j] < 64 and (di >= dj):   
+                            print("rd and l exist2")
                             s_n_i =  distance_along_path(x[:,i], r_b_path, cp)
 
                             s_n_j = np.linalg.norm(x[:,j] - np.array([60, 58]))
@@ -720,8 +720,8 @@ def cbf(x, u_ref):
                             A[count, i] = 1.0
                             b[count] = constraint_value4
                             count += 1
-                        elif lane_list[j] == 'rd' and lane_list[i] == 'l' and x[0,i] < 60 and x[1,j] > 58 and (di <= dj):
-
+                        elif lane_list[j] == 'rd' and lane_list[i] == 'l' and x[0,i] < 64 and x[1,j] > 54 and (di < dj):
+                            #print("rd and l exist3")
                             #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
                             cp = np.array([60, 58])
                             s_n_i =  np.linalg.norm(x[:,i] - np.array([60, 58]))
@@ -737,8 +737,8 @@ def cbf(x, u_ref):
                             A[count, j] = 1.0
                             b[count] = constraint_value4
                             count += 1   
-                        elif lane_list[j] == 'rd' and lane_list[i] == 'l' and x[0,i] < 60 and x[1,j] > 58 and (di >= dj):
-
+                        elif lane_list[j] == 'rd' and lane_list[i] == 'l' and x[0,i] < 64 and x[1,j] > 54 and (di >= dj):
+                            print("rd and l exist4")
                             #s_n_i = np.linalg.norm(x[:,i] - np.array([56, 46]))
                             cp = np.array([60, 58])
                             s_n_i =  np.linalg.norm(x[:,i] - np.array([60, 58]))
@@ -776,11 +776,11 @@ def calculate_steering_angle(car, target_point):
     steering_angle = angle_to_target - car.heading
     return steering_angle
 
-pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=6.0)
-pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 8.0)
-pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
-pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
-pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
+pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
+pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 6.0)
+pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
+pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
+pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
 #############################################################################
 
 
