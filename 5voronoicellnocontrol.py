@@ -13,10 +13,8 @@ from scipy.optimize import root
 from sympy import symbols, Eq, solve
 from collections import Counter
 
-import threading
-
 cvxopt.solvers.options['show_progress'] = False
-N = 5
+N = 3
 x = np.zeros((2, N))
 t_r_path = []
 r_b_path = []
@@ -181,23 +179,28 @@ c3 = Car(Point(65, 20), np.pi/2, 'green')
 c3.velocity = Point(0,0) 
 w.add(c3)
 
-c4 = Car(Point(56, 90), -np.pi/2, 'red')
+c4 = Car(Point(56, 90), np.pi/2, 'red')
 c4.velocity = Point(0,0) 
 w.add(c4)
 
-c5 = Car(Point(20, 58), 0, 'yellow')
+c5 = Car(Point(0, 58), 0, 'yellow')
 c5.velocity = Point(0,0) 
 
 w.add(c5)
+'''
+c6= Car(Point(0, 58), 0, 'brown')
+c6.velocity = Point(0,0) 
 
+w.add(c6)
+'''
 clist = []
 clist.append(c1)
 clist.append(c2)
 
 clist.append(c3)
-clist.append(c4)
-clist.append(c5)
-lane_list = ['rd', 'r', 'd', 'l', 'u']
+#clist.append(c4)
+#clist.append(c5)
+lane_list = ['rd', 'r', 'd']
 
 
 #########################################################################
@@ -207,7 +210,7 @@ import matplotlib.pyplot as plt
 prange = 0
 # Generate random points
 plist = []
-for i in range(1000):
+for i in range(3000):
     plist.append(Pedestrian(Point(-1,-1), np.pi))
     w.add(plist[i])
 
@@ -226,7 +229,7 @@ def wv():
     #u_ref = np.array([0 ,0, 0])
     for i in range(N-1):
         for j in range(i+1, N):
-            #print(i, j)
+
             global prange
 
             phi = 1  # Example value
@@ -242,37 +245,36 @@ def wv():
                 return term1 - term2
 
             pointlist = []
-            b_initial_guess = 60.0
+            b_initial_guess = 0.0
             b_solution, = fsolve(equation1, b_initial_guess)
-            #print(b_solution)
+
             pointlist.append((0.0, b_solution))
             def equation2(b):
                 term1 = np.sqrt((120- x_clone[0, i])**2 + (b - x_clone[1, i])**2) - ci
                 term2 = np.sqrt((120- x_clone[0, j])**2 + (b - x_clone[1, j])**2) - cj
                 return term1 - term2
 
-            b_initial_guess = 60.0
+            b_initial_guess = 0.0
             b_solution2, = fsolve(equation2, b_initial_guess)
-            #print(b_solution2)
+
             pointlist.append((120.0, b_solution2))
 
             def equation3(a):
                 term1 = np.sqrt((a- x_clone[0, i])**2 + (0 - x_clone[1, i])**2) - ci
                 term2 = np.sqrt((a- x_clone[0, j])**2 + (0 - x_clone[1, j])**2) - cj
                 return term1 - term2
-            a_initial_guess = 60.0
+            a_initial_guess = 0.0
             a_solution, = fsolve(equation3, a_initial_guess)
-            #print(a_solution)
+
             pointlist.append((a_solution, 0.0))
             def equation4(a):
                 term1 = np.sqrt((a- x_clone[0, i])**2 + (120 - x_clone[1, i])**2) - ci
                 term2 = np.sqrt((a- x_clone[0, j])**2 + (120 - x_clone[1, j])**2) - cj
                 return term1 - term2
-            a_initial_guess = 60.0
+            a_initial_guess = 0.0
             a_solution2, = fsolve(equation4, a_initial_guess)
             pointlist.append((a_solution2,120.0))
-            #print(a_solution2)
-            #print(pointlist)
+
             indices = []
             biga = 0
             smalla = 0
@@ -319,10 +321,9 @@ def wv():
             termlistcar2.append(term5 - term6)
 
             if adifference > bdifference: # 여기가 문제였음 >= 로 바꾸면 점이 촘촘해짐
-                for k in range(100):
-                    #print("there")
-                    #print(indices)
-                    steplength = abs(biga - smalla) / 100
+                for k in range(200):
+
+                    steplength = abs(biga - smalla) / 200
                     step_a = smalla + steplength * k
                     def equation5(b):
                         term1 = np.sqrt((step_a- x_clone[0, i])**2 + (b - x_clone[1, i])**2) - ci
@@ -332,12 +333,12 @@ def wv():
 
                     b_initial_guess = 60.0
                     b_solution, = fsolve(equation5, b_initial_guess)
-                    #print(b_solution)
+
                     pointlist_r.append((step_a, b_solution))
             else:
-                for k in range(100):
-                    #print("here")
-                    steplength = abs(bigb - smallb) / 100
+                for k in range(200):
+
+                    steplength = abs(bigb - smallb) / 200
                     step_b = smallb + (steplength * k)
                     def equation6(a):
                         term1 = np.sqrt((a- x_clone[0, i])**2 + (step_b - x_clone[1, i])**2) - ci
@@ -346,7 +347,7 @@ def wv():
 
                     a_initial_guess = 60.0
                     a_solution, = fsolve(equation6, a_initial_guess)
-                    #print(b_solution)
+
                     pointlist_r.append((a_solution, step_b))
 
     for i in range(N):
@@ -354,7 +355,7 @@ def wv():
         todeleteindex = []
         for j in range(N):
             if i != j:
-                #print(i, j)
+
                 phi = 1  # Example value
                 v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
                 v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
@@ -365,10 +366,10 @@ def wv():
                 term5 = np.sqrt((x_clone[0, j] - x_clone[0, i])**2 + (x_clone[1, j] - x_clone[1, i])**2) - ci
                 term6 = np.sqrt((x_clone[0, j] - x_clone[0, j])**2 + (x_clone[1, j] - x_clone[1, j])**2) - cj
 
-                #print("i and j", i , j)
+
                 if (term3 - term4) > 0:
                     if i == 1 and j == 2:
-                        #print("12 if")
+
                         pass
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
@@ -378,22 +379,21 @@ def wv():
 
                 elif (term3 - term4) < 0:
                     if i == 1 and j == 2:
-                        #print("12 elif")
+
                         pass
-                    print(len(pointlist_r))
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
                         if term3 - term4 < 0:
                             todeleteindex.append(v)
+
             
             element_counts = Counter(todeleteindex)
-            duplicates = {element: count for element, count in element_counts.items() if count >= N-1}
+            duplicates = {element: count for element, count in element_counts.items() if count >= 2}
             sorted_list = sorted(duplicates, reverse=True)
             
             for index in sorted_list:
-                #print("pointlist_r length", len(pointlist_r))
-                #print(len(sorted_list))
+
                 pointlist_r.pop(index)
         todeleteindex = []
 
@@ -404,7 +404,7 @@ def wv():
         todeleteindex = []
         for j in range(N):
             if i != j:
-                #print(i, j)
+
                 phi = 1  # Example value
                 v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
                 v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
@@ -414,7 +414,7 @@ def wv():
                 term6 = np.sqrt((x_clone[0, i] - x_clone[0, j])**2 + (x_clone[1, i] - x_clone[1, j])**2) - cj
                 if (term5 - term6) > 0:
                     if i == 1 and j == 0:
-                        print("12 if")
+                        pass
                     for v in range(len(pointlist_r)):
                         term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
                         term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
@@ -423,7 +423,7 @@ def wv():
 
                 elif (term5 - term6) < 0:
                     if i == 1 and j == 0:
-                        print("12 elif")
+                        pass
                     for v in range(len(pointlist_r)):
                         term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
                         term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
@@ -431,12 +431,11 @@ def wv():
                             todeleteindex.append(v)
 
                 element_counts = Counter(todeleteindex)
-                duplicates = {element: count for element, count in element_counts.items() if count >=  N-1}
+                duplicates = {element: count for element, count in element_counts.items() if count >= 2}
                 sorted_list = sorted(duplicates, reverse=True)
                 
                 for index in sorted_list:
-                    #print("pointlist_r length", len(pointlist_r))
-                    #print(len(sorted_list))
+
                     pointlist_r.pop(index)   
                     #pass
         todeleteindex = []
@@ -446,7 +445,7 @@ def wv():
         todeleteindex = []
         for j in range(N):
             if i != j:
-                #print(i, j)
+
                 phi = 1  # Example value
                 v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
                 v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
@@ -456,7 +455,7 @@ def wv():
                 term6 = np.sqrt((x_clone[0, i] - x_clone[0, j])**2 + (x_clone[1, i] - x_clone[1, j])**2) - cj
                 if (term5 - term6) > 0:
                     if i == 1 and j == 0:
-                        print("12 if")
+                        pass
                     for v in range(len(pointlist_r)):
                         term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
                         term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
@@ -465,7 +464,7 @@ def wv():
 
                 elif (term5 - term6) < 0:
                     if i == 1 and j == 0:
-                        print("12 elif")
+                        pass
                     for v in range(len(pointlist_r)):
                         term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
                         term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
@@ -473,96 +472,11 @@ def wv():
                             todeleteindex.append(v)
 
                 element_counts = Counter(todeleteindex)
-                duplicates = {element: count for element, count in element_counts.items() if count >=  N-1}
+                duplicates = {element: count for element, count in element_counts.items() if count >= 2}
                 sorted_list = sorted(duplicates, reverse=True)
                 
                 for index in sorted_list:
-                    #print("pointlist_r length", len(pointlist_r))
-                    #print(len(sorted_list))
-                    pointlist_r.pop(index)   
-                    #pass
-        todeleteindex = []
 
-    for i in range(1):
-        i = 3
-        todeleteindex = []
-        for j in range(N):
-            if i != j:
-                #print(i, j)
-                phi = 1  # Example value
-                v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
-                v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
-                ci  = phi * v_i + v_i + phi * u_ref[i]
-                cj = phi * v_j + v_j + phi * u_ref[j]
-                term5 = np.sqrt((x_clone[0, i] - x_clone[0, i])**2 + (x_clone[1, i] - x_clone[1, i])**2) - ci
-                term6 = np.sqrt((x_clone[0, i] - x_clone[0, j])**2 + (x_clone[1, i] - x_clone[1, j])**2) - cj
-                if (term5 - term6) > 0:
-                    if i == 1 and j == 0:
-                        print("12 if")
-                    for v in range(len(pointlist_r)):
-                        term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
-                        term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
-                        if term5 - term6 > 0:
-                            todeleteindex.append(v)
-
-                elif (term5 - term6) < 0:
-                    if i == 1 and j == 0:
-                        print("12 elif")
-                    for v in range(len(pointlist_r)):
-                        term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
-                        term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
-                        if term5 - term6 < 0:
-                            todeleteindex.append(v)
-
-                element_counts = Counter(todeleteindex)
-                duplicates = {element: count for element, count in element_counts.items() if count >=  N-1}
-                sorted_list = sorted(duplicates, reverse=True)
-                
-                for index in sorted_list:
-                    #print("pointlist_r length", len(pointlist_r))
-                    #print(len(sorted_list))
-                    pointlist_r.pop(index)   
-                    #pass
-        todeleteindex = []
-
-    for i in range(1):
-        i = 4
-        todeleteindex = []
-        for j in range(N):
-            if i != j:
-                #print(i, j)
-                phi = 1  # Example value
-                v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
-                v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
-                ci  = phi * v_i + v_i + phi * u_ref[i]
-                cj = phi * v_j + v_j + phi * u_ref[j]
-                term5 = np.sqrt((x_clone[0, i] - x_clone[0, i])**2 + (x_clone[1, i] - x_clone[1, i])**2) - ci
-                term6 = np.sqrt((x_clone[0, i] - x_clone[0, j])**2 + (x_clone[1, i] - x_clone[1, j])**2) - cj
-                if (term5 - term6) > 0:
-                    if i == 1 and j == 0:
-                        print("12 if")
-                    for v in range(len(pointlist_r)):
-                        term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
-                        term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
-                        if term5 - term6 > 0:
-                            todeleteindex.append(v)
-
-                elif (term5 - term6) < 0:
-                    if i == 1 and j == 0:
-                        print("12 elif")
-                    for v in range(len(pointlist_r)):
-                        term5 = np.sqrt((pointlist_r[v][0] - x_clone[0, i])**2 + (pointlist_r[v][1] - x_clone[1, i])**2) - ci
-                        term6 = np.sqrt((pointlist_r[v][0] - x_clone[0, j])**2 + (pointlist_r[v][1] - x_clone[1, j])**2) - cj
-                        if term5 - term6 < 0:
-                            todeleteindex.append(v)
-
-                element_counts = Counter(todeleteindex)
-                duplicates = {element: count for element, count in element_counts.items() if count >=  N-1}
-                sorted_list = sorted(duplicates, reverse=True)
-                
-                for index in sorted_list:
-                    #print("pointlist_r length", len(pointlist_r))
-                    #print(len(sorted_list))
                     pointlist_r.pop(index)   
                     #pass
         todeleteindex = []
@@ -573,7 +487,7 @@ def wv():
 def wvcontrol(points):
     # only for blue car
     x_clone = x.copy()
-    y_val = 64
+    y_val = 68
     pointsonpath = []
     asollist = []
     duplicateidxlist= []
@@ -592,11 +506,21 @@ def wvcontrol(points):
                     term2 = np.sqrt((a- x_clone[0, j])**2 + (y_val - x_clone[1, j])**2) - cj
                     return term1 - term2
 
-                a_initial_guess = 60.0
+                a_initial_guess = 61.0
                 a_solution, = fsolve(equation6, a_initial_guess)
+                print(a_solution)
                 asollist.append(a_solution)
                 pointsonpath.append((a_solution, y_val))
 
+
+
+    #print(pointsonpath)
+
+    c4.center.x = pointsonpath[0][0]
+    c4.center.y = pointsonpath[0][1]
+
+    c5.center.x = pointsonpath[1][0]
+    c5.center.y = pointsonpath[1][1]
 
 
     biggest = -float('inf')
@@ -606,7 +530,7 @@ def wvcontrol(points):
         idx = 0
         for j in range(N):
             if i != j:
-                print(idx)
+
                 phi = 1  # Example value
                 v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
                 v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
@@ -615,7 +539,7 @@ def wvcontrol(points):
                 term3 = np.sqrt((x_clone[0, i] - x_clone[0, i])**2 + (x_clone[1, i] - x_clone[1, i])**2) - ci
                 term4 = np.sqrt((x_clone[0, i] - x_clone[0, j])**2 + (x_clone[1, i] - x_clone[1, j])**2) - cj
 
-                #print("i and j", i , j)
+
                 if (term3 - term4) > 0:
                     term3 = np.sqrt((pointsonpath[idx][0] - x_clone[0, i])**2 + (y_val - x_clone[1, i])**2) - ci
                     term4 = np.sqrt((pointsonpath[idx][0] - x_clone[0, j])**2 + (y_val - x_clone[1, j])**2) - cj
@@ -634,8 +558,7 @@ def wvcontrol(points):
     sorted_list = sorted(duplicates, reverse=True)
                 
     for index in sorted_list:
-        #print("pointlist_r length", len(pointlist_r))
-        #print(len(sorted_list))
+
         pointsonpath.pop(index)   
         #pass
 
@@ -643,7 +566,7 @@ def wvcontrol(points):
         if biggest < pointsonpath[i][0]:
             biggestidx = i
     
-    pointsonpath[i][0] 
+    print(pointsonpath[biggestidx][0])
 
 
 
@@ -653,17 +576,12 @@ def calculate_steering_angle(car, target_point):
     steering_angle = angle_to_target - car.heading
     return steering_angle
 
-pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 5.0)
+pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
 pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 5.0)
-pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity= 5.0)
-pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
-pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=5.0)
+pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity= 8.0)
+#pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
+#pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
 #############################################################################
-
-def run_wv():
-    while True:
-        wv()
-        time.sleep(0.1)
 
 if not human_controller:
     time_steps = int(400 * dt)  # Adjust for correct time steps based on dt
@@ -685,18 +603,11 @@ if not human_controller:
         velocity_magnitude = np.sqrt(c3.velocity.x**2 + c3.velocity.y**2)
         acceleration = pid_controller3.control(velocity_magnitude, dt)
         throttle3 = acceleration
-        velocity_magnitude = np.sqrt(c4.velocity.x**2 + c4.velocity.y**2)
-        acceleration = pid_controller4.control(velocity_magnitude, dt)
-        throttle4 = acceleration
-        velocity_magnitude = np.sqrt(c5.velocity.x**2 + c5.velocity.y**2)
-        acceleration = pid_controller5.control(velocity_magnitude, dt)
-        throttle5 = acceleration
 
         #u_ref = np.array([throttle1 ,throttle2, throttle3, throttle4,throttle5])
-        #u_ref = np.array([throttle1 ,throttle2, throttle3, throttle4])
-        global u_ref
-        u_ref = np.array([throttle1 ,throttle2, throttle3, throttle4, throttle5])
         #u_ref = np.array([throttle1 ,throttle2, throttle3])
+        global u_ref
+        u_ref = np.array([throttle1 ,throttle2, throttle3])
         # Update world
         w.tick() # Tick the world for one time step
         w.render()
@@ -728,31 +639,28 @@ if not human_controller:
         if current_milestone_index == len(r_b_path):
             current_milestone_index = 0
 
-        c1.set_control(steering_angle, u_ref[0])
-        c2.set_control(0, u_ref[1])
-        c3.set_control(0, u_ref[2])
-        c4.set_control(0, u_ref[3])
-        c5.set_control(0, u_ref[4])
 
 
         if time_passed < 710:
 
             pointlist_r = []
             pointlist_r_clone = []
-            for v in range(1000):
+            for v in range(300):
                 plist[v].center = Point(-1, -1)
 
-
-            #wv_thread = threading.Thread(target=run_wv)
-            #wv_thread.daemon = True
-            #wv_thread.start()
             wv()
-            #wvcontrol(pointlist_r_clone)
-            
+            wvcontrol(pointlist_r_clone)
+
+            c1.set_control(steering_angle, u_ref[0])
+            c2.set_control(0, u_ref[1])
+            c3.set_control(0, u_ref[2])
             
             for v in range(len(pointlist_r_clone)):
 
                 plist[v].center = Point(pointlist_r_clone[v][0], pointlist_r_clone[v][1])
+
+
+
 
 
         for i in range(N):
