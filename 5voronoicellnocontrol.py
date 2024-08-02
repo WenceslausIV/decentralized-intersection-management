@@ -349,7 +349,7 @@ def wv():
                     #print(b_solution)
                     pointlist_r.append((a_solution, step_b))
 
-    for i in range(N):
+    for i in range(1):
         i = 0
         todeleteindex = []
         for j in range(N):
