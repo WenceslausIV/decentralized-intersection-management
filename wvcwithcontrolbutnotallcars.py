@@ -175,11 +175,11 @@ c2 = Car(Point(90,68), np.pi, 'blue')
 c2.velocity = Point(0,0) 
 w.add(c2)
 
-c3 = Car(Point(65, 20), np.pi/2, 'green')
+c3 = Car(Point(67, 20), np.pi/2, 'green')
 c3.velocity = Point(0,0) 
 w.add(c3)
 
-c4 = Car(Point(56, 90), -np.pi/2, 'red')
+c4 = Car(Point(54, 90), -np.pi/2, 'red')
 c4.velocity = Point(0,0) 
 w.add(c4)
 
@@ -322,7 +322,7 @@ def wv():
 
             if adifference > bdifference:
                 for k in range(100):
-                    steplength = abs(120 - 0) / 100
+                    steplength = abs(123 - (-3)) / 100
                     step_a = 0 + steplength * k
 
                     def equation5(b):
@@ -331,14 +331,14 @@ def wv():
                         return term1 - term2
 
                     try:
-                        b_solution = brentq(equation5, 0, 120)
+                        b_solution = brentq(equation5, -3, 123)
                         pointlist_r.append((step_a, b_solution))
                     except ValueError:
                         # 해가 없는 경우 예외 처리
                         continue
             else:
                 for k in range(100):
-                    steplength = abs(120 - 0) / 100
+                    steplength = abs(123 - (-3)) / 100
                     step_b = 0 + (steplength * k)
 
                     def equation6(a):
@@ -348,7 +348,7 @@ def wv():
 
                     try:
                         # 해를 찾을 구간을 설정합니다. 여기서는 domain_min과 domain_max로 설정합니다.
-                        a_solution = brentq(equation6, 0, 120)
+                        a_solution = brentq(equation6, -3, 123)
                         pointlist_r.append((a_solution, step_b))
                     except ValueError:
                         # 해가 없는 경우 예외 처리
@@ -378,7 +378,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 > 0.01:
+                        if term3 - term4 > 0.001:
                             todeleteindex.append(v)
 
                 elif (term3 - term4) < 0:
@@ -389,7 +389,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 < -0.01:
+                        if term3 - term4 < -0.001:
                             todeleteindex.append(v)
 
     element_counts = Counter(todeleteindex)
@@ -427,7 +427,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 > 0.01:
+                        if term3 - term4 > 0.001:
                             todeleteindex.append(v)
 
                 elif (term3 - term4) < 0:
@@ -438,7 +438,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 < -0.01:
+                        if term3 - term4 < -0.001:
                             todeleteindex.append(v)
 
     element_counts = Counter(todeleteindex)
@@ -476,7 +476,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 > 0.01:
+                        if term3 - term4 > 0.001:
                             todeleteindex.append(v)
 
                 elif (term3 - term4) < 0:
@@ -487,7 +487,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 < -0.01:
+                        if term3 - term4 < -0.001:
                             todeleteindex.append(v)
 
     element_counts = Counter(todeleteindex)
@@ -524,7 +524,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 > 0.01:
+                        if term3 - term4 > 0.001:
                             todeleteindex.append(v)
 
                 elif (term3 - term4) < 0:
@@ -535,7 +535,7 @@ def wv():
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
-                        if term3 - term4 < -0.01:
+                        if term3 - term4 < -0.001:
                             todeleteindex.append(v)
 
     element_counts = Counter(todeleteindex)
@@ -623,7 +623,7 @@ def wvcontrol3(pl, caridx):
         x_val = pl[v][0]
         y_val = pl[v][1]
         
-        if y_val > x[1, caridx] and 63 <= x_val <= 67:
+        if y_val > x[1, caridx] and 65 <= x_val <= 69:
             distance = abs(x[1, caridx] - y_val)
             if distance < min_distance:
                 min_distance = distance
@@ -646,7 +646,7 @@ def wvcontrol4(pl, caridx):
         x_val = pl[v][0]
         y_val = pl[v][1]
         
-        if y_val < x[1, caridx] and 54 <= x_val <= 58:
+        if y_val < x[1, caridx] and 52 <= x_val <= 56:
             distance = abs(x[1, caridx] - y_val)
             if distance < min_distance:
                 min_distance = distance
@@ -663,7 +663,7 @@ def calculate_steering_angle(car, target_point):
     steering_angle = angle_to_target - car.heading
     return steering_angle
 
-pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=0.0)
+pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=6.0)
 pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 6.0)
 pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity= 5.0)
 pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
@@ -717,31 +717,32 @@ if not human_controller:
                 u_ref = np.array([0,0,0,0,0])
             pointlist_r = []
 
-            for v in range(300):
+            for v in range(3000):
                 plist[v].center = Point(-1, -1)
 
             wv()
             cp2 = wvcontrol2(pointlist_r, 1)
             if cp2 == None:
-                gp2 = 10
+                gp2 = 40
             else:
-                gp2 = np.linalg.norm(x[:,1] - np.array([cp2[0], cp2[1]])) #2 is car length /2
-            k2 = 0.2
+                gp2 = np.linalg.norm(x[:,1] - np.array([cp2[0], cp2[1]]))- 4 #2 is car length /2
+            k2 = 0.1
             #print(k * gp)
             cp3 = wvcontrol3(pointlist_r, 2)
             if cp3 == None:
-                gp3 = 10
+                gp3 = 40
             else:
-                gp3 = np.linalg.norm(x[:,3] - np.array([cp3[0], cp3[1]])) #2 is car length /2
+                gp3 = np.linalg.norm(x[:,3] - np.array([cp3[0], cp3[1]])) - 4#2 is car length /2
             k3 = 0.1
             #print(k3 * gp3)
             cp4 = wvcontrol4(pointlist_r, 3)
             if cp4 == None:
-                gp4 = 10
+                gp4 = 40
+                #print(k4 * gp4)
             else:
-                gp4 = np.linalg.norm(x[:,4] - np.array([cp4[0], cp4[1]])) #2 is car length /2
+                gp4 = np.linalg.norm(x[:,4] - np.array([cp4[0], cp4[1]])) - 4#2 is car length /2
             k4 = 0.1
-            #print(k4 * gp4)
+            print(k4 * gp4)
             
             velocity_magnitude = np.sqrt(c1.velocity.x**2 + c1.velocity.y**2)
             acceleration = pid_controller.control(velocity_magnitude, dt)
@@ -784,19 +785,19 @@ if not human_controller:
         for i in range(N):
             if x[0,i] >= 141:
                 clist[i].center = Point(140, 68)
-                clist[i].color = 'white'
+
             
             elif x[0,i] < 0:
                 clist[i].center = Point(130,68)
                 clist[i].heading = np.pi
-                clist[i].color = 'white'
+
             elif x[1,i] < 0:
-                clist[i].center = Point(121,68)
-                clist[i].heading = np.pi
-                clist[i].color = 'white'
+                clist[i].center = Point(54,120)
+
+
             elif x[1,i] >= 141:
                 clist[i].center = Point(65, 0)
                 clist[i].heading = np.pi/2
-                clist[i].color = 'white'
+
 
     w.close()
