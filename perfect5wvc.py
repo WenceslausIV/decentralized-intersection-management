@@ -175,11 +175,11 @@ c2 = Car(Point(90,68), np.pi, 'blue')
 c2.velocity = Point(0,0) 
 w.add(c2)
 
-c3 = Car(Point(65, 20), np.pi/2, 'green')
+c3 = Car(Point(67, 20), np.pi/2, 'green')
 c3.velocity = Point(0,0) 
 w.add(c3)
 
-c4 = Car(Point(56, 90), -np.pi/2, 'red')
+c4 = Car(Point(54, 90), -np.pi/2, 'red')
 c4.velocity = Point(0,0) 
 w.add(c4)
 
@@ -187,6 +187,11 @@ c5 = Car(Point(0, 58), 0, 'yellow')
 c5.velocity = Point(0,0) 
 
 w.add(c5)
+
+c6 = Car(Point(0, 0), 0, 'pink')
+c6.velocity = Point(0,0) 
+
+w.add(c6)
 
 clist = []
 clist.append(c1)
@@ -317,7 +322,7 @@ def wv():
 
             if adifference > bdifference:
                 for k in range(100):
-                    steplength = abs(120 - 0) / 100
+                    steplength = abs(123 - (-3)) / 100
                     step_a = 0 + steplength * k
 
                     def equation5(b):
@@ -326,14 +331,14 @@ def wv():
                         return term1 - term2
 
                     try:
-                        b_solution = brentq(equation5, 0, 120)
+                        b_solution = brentq(equation5, -3, 123)
                         pointlist_r.append((step_a, b_solution))
                     except ValueError:
                         # 해가 없는 경우 예외 처리
                         continue
             else:
                 for k in range(100):
-                    steplength = abs(120 - 0) / 100
+                    steplength = abs(123 - (-3)) / 100
                     step_b = 0 + (steplength * k)
 
                     def equation6(a):
@@ -343,7 +348,7 @@ def wv():
 
                     try:
                         # 해를 찾을 구간을 설정합니다. 여기서는 domain_min과 domain_max로 설정합니다.
-                        a_solution = brentq(equation6, 0, 120)
+                        a_solution = brentq(equation6, -3, 123)
                         pointlist_r.append((a_solution, step_b))
                     except ValueError:
                         # 해가 없는 경우 예외 처리
@@ -355,6 +360,7 @@ def wv():
         for j in range(N):
             if i != j:
                 #print(i, j)
+                
                 phi = 1  # Example value
                 v_i = np.sqrt(clist[i].velocity.x**2 + clist[i].velocity.y**2)
                 v_j = np.sqrt(clist[j].velocity.x**2 + clist[j].velocity.y**2)
@@ -365,7 +371,7 @@ def wv():
                 term5 = np.sqrt((x[0, j] - x[0, i])**2 + (x[1, j] - x[1, i])**2) - ci
                 term6 = np.sqrt((x[0, j] - x[0, j])**2 + (x[1, j] - x[1, j])**2) - cj
 
-                #print("i and j", i , j)
+
                 if (term3 - term4) > 0:
                     if i == 1 and j == 2:
                         #print("12 if")
@@ -380,7 +386,7 @@ def wv():
                     if i == 1 and j == 2:
                         #print("12 elif")
                         pass
-                    print(len(pointlist_r))
+                    #print(len(pointlist_r))
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
@@ -393,7 +399,7 @@ def wv():
 
     for index in sorted_list:
         #print("pointlist_r length", len(pointlist_r))
-        print("sorted list length", len(sorted_list))
+        #print("sorted list length", len(sorted_list))
         pointlist_r.pop(index)
     todeleteindex = []
 
@@ -414,25 +420,22 @@ def wv():
                 term5 = np.sqrt((x[0, j] - x[0, i])**2 + (x[1, j] - x[1, i])**2) - ci
                 term6 = np.sqrt((x[0, j] - x[0, j])**2 + (x[1, j] - x[1, j])**2) - cj
 
-                #print("i and j", i , j)
+
                 if (term3 - term4) > 0:
-                    if i == 1 and j == 2:
-                        #print("12 if")
-                        pass
+
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
+
                         if term3 - term4 > 0.01:
                             todeleteindex.append(v)
 
                 elif (term3 - term4) < 0:
-                    if i == 1 and j == 2:
-                        #print("12 elif")
-                        pass
-                    print(len(pointlist_r))
+
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
+
                         if term3 - term4 < -0.01:
                             todeleteindex.append(v)
 
@@ -442,7 +445,7 @@ def wv():
 
     for index in sorted_list:
         #print("pointlist_r length", len(pointlist_r))
-        print("sorted list length", len(sorted_list))
+        #print("sorted list length", len(sorted_list))
         pointlist_r.pop(index)
     todeleteindex = []
 
@@ -478,7 +481,7 @@ def wv():
                     if i == 1 and j == 2:
                         #print("12 elif")
                         pass
-                    print(len(pointlist_r))
+                    #print(len(pointlist_r))
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
@@ -491,7 +494,7 @@ def wv():
 
     for index in sorted_list:
         #print("pointlist_r length", len(pointlist_r))
-        print("sorted list length", len(sorted_list))
+        #print("sorted list length", len(sorted_list))
         pointlist_r.pop(index)
     todeleteindex = []
                
@@ -526,7 +529,7 @@ def wv():
                     if i == 1 and j == 2:
                         #print("12 elif")
                         pass
-                    print(len(pointlist_r))
+                    #print(len(pointlist_r))
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
@@ -539,7 +542,7 @@ def wv():
 
     for index in sorted_list:
         #print("pointlist_r length", len(pointlist_r))
-        print("sorted list length", len(sorted_list))
+        #print("sorted list length", len(sorted_list))
         pointlist_r.pop(index)
     todeleteindex = []
 
@@ -574,7 +577,7 @@ def wv():
                     if i == 1 and j == 2:
                         #print("12 elif")
                         pass
-                    print(len(pointlist_r))
+                    #print(len(pointlist_r))
                     for v in range(len(pointlist_r)):
                         term3 = np.sqrt((pointlist_r[v][0] - x[0, i])**2 + (pointlist_r[v][1] - x[1, i])**2) - ci
                         term4 = np.sqrt((pointlist_r[v][0] - x[0, j])**2 + (pointlist_r[v][1] - x[1, j])**2) - cj
@@ -587,12 +590,86 @@ def wv():
 
     for index in sorted_list:
         #print("pointlist_r length", len(pointlist_r))
-        print("sorted list length", len(sorted_list))
+        #print("sorted list length", len(sorted_list))
         pointlist_r.pop(index)
     todeleteindex = []
+    
+    return pointlist_r
 
-
+def wvcontrol2(pl, caridx):
+    closest_point = None
+    min_distance = float('inf')
+    
+    for v in range(len(pl)):
+        x_val = pl[v][0]
+        y_val = pl[v][1]
         
+        if x_val < x[0, caridx] and 67 <= y_val <= 69:
+            distance = abs(x[0, caridx] - x_val)
+            if distance < min_distance:
+                min_distance = distance
+                closest_point = pl[v]
+    
+
+    return closest_point
+
+def wvcontrol3(pl, caridx):
+    closest_point = None
+    min_distance = float('inf')
+    
+    for v in range(len(pl)):
+        x_val = pl[v][0]
+        y_val = pl[v][1]
+        
+        if y_val > x[1, caridx] and 65 <= x_val <= 69:
+            distance = abs(x[1, caridx] - y_val)
+            if distance < min_distance:
+                min_distance = distance
+                closest_point = pl[v]
+    
+    if closest_point == None:
+        print("NONE!")
+        pass
+    else:
+        #c6.center.x = closest_point[0]
+        #c6.center.y = closest_point[1]
+        pass
+    return closest_point
+
+def wvcontrol4(pl, caridx):
+    closest_point = None
+    min_distance = float('inf')
+    
+    for v in range(len(pl)):
+        x_val = pl[v][0]
+        y_val = pl[v][1]
+        
+        if y_val < x[1, caridx] and 52 <= x_val <= 56:
+            distance = abs(x[1, caridx] - y_val)
+            if distance < min_distance:
+                min_distance = distance
+                closest_point = pl[v]
+    
+    return closest_point
+
+def wvcontrol5(pl, caridx):
+    closest_point = None
+    min_distance = float('inf')
+    
+    for v in range(len(pl)):
+        x_val = pl[v][0]
+        y_val = pl[v][1]
+        
+        if x_val > x[0, caridx] and 56 <= y_val <= 60:
+            distance = abs(x[0, caridx] - x_val)
+            if distance < min_distance:
+                min_distance = distance
+                closest_point = pl[v]
+    
+
+    return closest_point
+
+
 
 
 def calculate_steering_angle(car, target_point):
@@ -601,46 +678,22 @@ def calculate_steering_angle(car, target_point):
     steering_angle = angle_to_target - car.heading
     return steering_angle
 
-pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=7.0)
-pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 6.0)
-pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity= 5.0)
-pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
-pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=4.0)
+pid_controller = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=0.0)
+pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = 0.0)
+pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity= 0.0)
+pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=0.0)
+pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity=0.0)
 #############################################################################
 
 if not human_controller:
+    global u_ref
     time_steps = int(400 * dt)  # Adjust for correct time steps based on dt
     time_passed = 0.0
     current_milestone_index = 0
 
-
+    firstflag = 0
     while time_passed < 800.0:  # Run simulation for 40 seconds
         # Get current velocity and calculate throttle
-        if time_passed > 1:
-            clist[1].color = 'white'
-            #print("hello")
-        velocity_magnitude = np.sqrt(c1.velocity.x**2 + c1.velocity.y**2)
-        acceleration = pid_controller.control(velocity_magnitude, dt)
-        throttle1 = acceleration
-        velocity_magnitude = np.sqrt(c2.velocity.x**2 + c2.velocity.y**2)
-        acceleration = pid_controller2.control(velocity_magnitude, dt)
-        throttle2 = acceleration
-        
-        velocity_magnitude = np.sqrt(c3.velocity.x**2 + c3.velocity.y**2)
-        acceleration = pid_controller3.control(velocity_magnitude, dt)
-        throttle3 = acceleration
-        velocity_magnitude = np.sqrt(c4.velocity.x**2 + c4.velocity.y**2)
-        acceleration = pid_controller4.control(velocity_magnitude, dt)
-        throttle4 = acceleration
-        velocity_magnitude = np.sqrt(c5.velocity.x**2 + c5.velocity.y**2)
-        acceleration = pid_controller5.control(velocity_magnitude, dt)
-        throttle5 = acceleration
-        global u_ref
-        u_ref = np.array([throttle1 ,throttle2, throttle3, throttle4,throttle5])
-        #u_ref = np.array([throttle1 ,throttle2, throttle3])
-        #global u_ref
-        #u_ref = np.array([throttle1 ,throttle2, throttle3])
-        # Update world
         w.tick() # Tick the world for one time step
         w.render()
         time.sleep(dt/4) # Watch it at 4x slower speed
@@ -671,24 +724,85 @@ if not human_controller:
         if current_milestone_index == len(r_b_path):
             current_milestone_index = 0
 
-        c1.set_control(steering_angle, u_ref[0])
-        c2.set_control(0, u_ref[1])
-        c3.set_control(0, u_ref[2])
-        c4.set_control(0, u_ref[3])
-        c5.set_control(0, u_ref[4])
 
 
         if time_passed < 710:
-
+            if firstflag == 0:
+                firstflag += 1
+                u_ref = np.array([0,0,0,0,0])
             pointlist_r = []
 
-            for v in range(300):
+            for v in range(3000):
                 plist[v].center = Point(-1, -1)
 
             wv()
+            cp2 = wvcontrol2(pointlist_r, 1)
+            if cp2 == None:
+                gp2 = 40
+            else:
+                gp2 = np.linalg.norm(x[:,1] - np.array([cp2[0], cp2[1]]))- 4 #2 is car length /2
+            k2 = 0.1
+            #print(k * gp)
+            cp3 = wvcontrol3(pointlist_r, 2)
+            if cp3 == None:
+                gp3 = 40
+            else:
+                gp3 = np.linalg.norm(x[:,3] - np.array([cp3[0], cp3[1]])) - 4#2 is car length /2
+            k3 = 0.1
+            #print(k3 * gp3)
+            cp4 = wvcontrol4(pointlist_r, 3)
+            if cp4 == None:
+                gp4 = 40
+                #print(k4 * gp4)
+            else:
+                gp4 = np.linalg.norm(x[:,4] - np.array([cp4[0], cp4[1]])) - 4#2 is car length /2
+            k4 = 0.1
+            #print(k4 * gp4)
+            cp5 = wvcontrol5(pointlist_r, 4)
+            if cp5 == None:
+                gp5 = 40
+                #print(k4 * gp4)
+            else:
+                gp5 = np.linalg.norm(x[:,4] - np.array([cp5[0], cp5[1]])) - 4#2 is car length /2
+            k5 = 0.1
+            print(k5 * gp5)
 
-            #remove_dots()
             
+            velocity_magnitude = np.sqrt(c1.velocity.x**2 + c1.velocity.y**2)
+            acceleration = pid_controller.control(velocity_magnitude, dt)
+            throttle1 = acceleration
+
+            pid_controller2 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = k2 * gp2)
+
+            velocity_magnitude = np.sqrt(c2.velocity.x**2 + c2.velocity.y**2)
+            acceleration = pid_controller2.control(velocity_magnitude, dt)
+            throttle2 = acceleration
+            
+            pid_controller3 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = k3 * gp3)
+           
+            velocity_magnitude = np.sqrt(c3.velocity.x**2 + c3.velocity.y**2)
+            acceleration = pid_controller3.control(velocity_magnitude, dt)
+            throttle3 = acceleration
+
+            pid_controller4 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = k4 * gp4)
+           
+            velocity_magnitude = np.sqrt(c4.velocity.x**2 + c4.velocity.y**2)
+            acceleration = pid_controller4.control(velocity_magnitude, dt)
+            throttle4 = acceleration
+
+            pid_controller5 = PIDController(kp=1.0, ki=0.5, kd=0.1, target_velocity = k5 * gp5)
+           
+            velocity_magnitude = np.sqrt(c5.velocity.x**2 + c5.velocity.y**2)
+            acceleration = pid_controller5.control(velocity_magnitude, dt)
+            throttle5 = acceleration
+            u_ref = np.array([throttle1 ,throttle2, throttle3, throttle4, throttle5])
+
+            c1.set_control(steering_angle, u_ref[0])
+            c2.set_control(0, u_ref[1])
+            c3.set_control(0, u_ref[2])
+            c4.set_control(0, u_ref[3])
+            c5.set_control(0, u_ref[4])
+
             for v in range(len(pointlist_r)):
 
                 plist[v].center = Point(pointlist_r[v][0], pointlist_r[v][1])
@@ -697,19 +811,19 @@ if not human_controller:
         for i in range(N):
             if x[0,i] >= 141:
                 clist[i].center = Point(140, 68)
-                clist[i].color = 'white'
+
             
             elif x[0,i] < 0:
                 clist[i].center = Point(130,68)
                 clist[i].heading = np.pi
-                clist[i].color = 'white'
+
             elif x[1,i] < 0:
-                clist[i].center = Point(121,68)
-                clist[i].heading = np.pi
-                clist[i].color = 'white'
+                clist[i].center = Point(54,120)
+
+
             elif x[1,i] >= 141:
                 clist[i].center = Point(65, 0)
                 clist[i].heading = np.pi/2
-                clist[i].color = 'white'
+
 
     w.close()
